@@ -71,7 +71,9 @@
 
 
         <form action="{{ url_for('index') }}" method="POST">
-            {{ form.hidden_tag() }} <div class="form-grid">
+            {{ form.hidden_tag() }}
+
+            <div class="form-grid">
                 <div class="full-column">
                     {{ form.email.label }}
                     {{ form.email(placeholder="ejemplo@correo.com") }}
@@ -131,9 +133,13 @@
 
     <script>
         function toggleEspecie() {
+          // WTForms genera el id="especie" automáticamente para el SelectField
             const especie = document.getElementById("especie").value;
+
+            // Si la especie es Gato, quita 'hidden' de gatos y ponlo en perros
             document.getElementById("div_gatos").classList.toggle("hidden", especie !== "Gato");
             document.getElementById("div_perros").classList.toggle("hidden", especie !== "Perro");
+
         }
     </script>
 </body>

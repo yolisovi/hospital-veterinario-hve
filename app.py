@@ -145,4 +145,4 @@ def ver_citas():
 
 if __name__ == '__main__':
     crear_tabla() # Llamada aquí a la creación de la tabla
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8000)

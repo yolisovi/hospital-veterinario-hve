@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HVE - Registro de Citas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <header>
+            <h1>Registro de citas Hospital Veterinario</h1>
+        </header>
+
+        <div class="info-grid-principal">
+            <div class="info-card">
+                <h4>1. Completa todos los campos solicitados con la información correspondiente.</h4>
+                <p> Es importante que los datos sean correctos para confirmar tu cita y brindar una mejor atención.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>2. Selecciona los servicios de tu interés.</h4>
+                <p> Puedes elegir más de una opción según las necesidades de tu animal de compañía.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>3. Duración de la cita.</h4>
+                <p> Cada cita tiene una duración de <strong>1 hora</strong>.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>4. Consulta gratuita:</h4>
+                <ul class="card-list">
+                    <li>La consulta constará de una revisión médica <strong>gratuita</strong>.</li>
+                    <li>Solo se aplicarán vacunas si el animal se encuentra sano tras la valoración.</li>
+                    <li>En el caso de perros, además, un hemograma y un urianálisis.</li>
+                </ul>
+            </div>
+
+            <div class="info-card dog-highlight">
+                <h4>5. Indicaciones EXCLUSIVAMENTE PARA PERROS</h4>
+                <p> Además de la consulta gratuita, <strong>si usted lo autoriza</strong>, se tomará una muestra sanguínea para biometría hemática; y se realizará un urianálisis.</p>
+                <p> Indicaciones para biometría hemática: <strong>Ayuno de 6 horas</strong></p>
+                <p> Indicaciones para urianálisis: <strong>Colecta de orina 1 hora</strong> antes de la cita en frasco limpio y protegido de la luz.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>6. Indicaciones para el ingreso:</h4>
+                <p><strong> Perros:</strong> deben ingresar con <strong>collar y correa.</strong></p>
+                <p><strong> Gatos:</strong> deben asistir en <strong>transportadora y premios para su manejo.</strong></p>
+            </div>
+
+            <div class="info-card">
+                <h4>7. Agenda:</h4>
+                <p> Elige el <strong>día y horario</strong> que mejor se adapte a tu disponibilidad.</p>
+                <p> Si tienes <strong>más de un animal de compañía,</strong> deberás <strong>registrar a cada una por separado.</strong></p>
+            </div>
+
+            <div class="info-card">
+                <h4>8. Costos de Servicio:</h4>
+                <p> En el motivo de consulta podrás consultar el costo de cada servicio.</p>
+            </div>
+
+            <div class="alerta-urgencias">
+                <strong><i class="fas fa-exclamation-triangle"></i> IMPORTANTE:</strong>
+                <p>• No se atenderán casos de urgencia.</p>
+                <p>• Si tu animal de compañía presenta signos de enfermedad, no asistas y consulta con un
+                médico veterinario de inmediato.</p>
+                <p>• Las fechas y horarios estarán sujetos a disponibilidad</p>
+            </div>
+        </div>
+
+
+        <form action="{{ url_for('index') }}" method="POST">
+            {{ form.hidden_tag() }} <div class="form-grid">
+                <div class="full-column">
+                    {{ form.email.label }}
+                    {{ form.email(placeholder="ejemplo@correo.com") }}
+                </div>
+
+                <div>
+                    {{ form.tutor.label }}
+                    {{ form.tutor() }}
+                </div>
+
+                <div>
+                    {{ form.telefono.label }}
+                    {{ form.telefono() }}
+                </div>
+
+                <div>
+                    {{ form.mascota.label }}
+                    {{ form.mascota() }}
+                </div>
+
+                <div>
+                    {{ form.edad.label }}
+                    {{ form.edad() }}
+                </div>
+
+                <div class="full-column">
+                    {{ form.especie.label }}
+                    {{ form.especie(onchange="toggleEspecie()") }}
+                </div>
+            </div>
+
+            <div id="div_gatos" class="hidden">
+                <h3>Servicios para Gatos</h3>
+                {{ form.servicios_gato() }}
+
+                {{ form.horario_gato.label }}
+                {{ form.horario_gato() }}
+            </div>
+
+            <div id="div_perros" class="hidden">
+                <h3>Servicios para Perros</h3>
+                {{ form.servicios_perro() }}
+
+                {{ form.horario_perro.label }}
+                {{ form.horario_perro() }}
+            </div>
+
+            <div class="full-column">
+                <div class="checkbox-group">
+                    {{ form.confirmacion() }}
+                    <span>{{ form.confirmacion.label.text }}</span>
+                </div>
+            </div>
+
+            {{ form.submit(class="btn-submit") }}
+        </form>
+
+    <script>
+        function toggleEspecie() {
+            const especie = document.getElementById("especie").value;
+            document.getElementById("div_gatos").classList.toggle("hidden", especie !== "Gato");
+            document.getElementById("div_perros").classList.toggle("hidden", especie !== "Perro");
+        }
+    </script>
+</body>
+</html>

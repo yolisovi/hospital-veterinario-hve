@@ -1,0 +1,287 @@
+/* Paleta: Azules, Grises y Blanco */
+:root {
+    --azul-ejecutivo: #2c3e50;
+    --azul-medico: #3498db;
+    --gris-fondo: #f4f7f6;
+    --blanco: #ffffff;
+    --rojo-alerta: #e74c3c;
+}
+
+body {
+    background-color: var(--gris-fondo);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 1100px;
+    margin: 20px auto;
+    background: var(--blanco);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-top: 10px solid var(--azul-ejecutivo);
+}
+
+/* DISEÑO EN CASCADA */
+.info-grid-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.badge {
+    background: var(--azul-ejecutivo);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.alerta-urgencias {
+    background: #fff5f5;
+    color: var(--rojo-alerta);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #feb2b2;
+    text-align: center;
+}
+
+/* FORMULARIO */
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--azul-ejecutivo);
+}
+
+#div_gatos ul, #div_perros ul {
+    list-style: none;
+    padding: 0;
+}
+#div_gatos li, #div_perros li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#div_gatos input[type="checkbox"], #div_perros input[type="checkbox"] {
+    width: auto !important; /* Mismo truco que usamos antes */
+}
+
+/* Esto aplica a todos los inputs EXCEPTO a los de tipo checkbox */
+input:not([type="checkbox"]), select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.btn-submit {
+    background: var(--azul-ejecutivo);
+    color: white;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+/* ESTA CLASE ES LA QUE HACE QUE FUNCIONEN LOS BOTONES */
+.hidden {
+    display: none !important;
+}
+
+h1 { color: var(--azul-ejecutivo); text-align: center; margin-bottom: 30px; }
+
+/* DISEÑO EN CASCADA (Uno sobre otro) */
+.info-grid-principal {
+    display: flex;             /* Cambiamos de grid a flex */
+    flex-direction: column;    /* Los pone uno debajo del otro */
+    gap: 5px;                 /* Espacio entre cada caja */
+    margin-bottom: 35px;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 10px;            /* Un poco más de aire interno */
+    width: 100%;              /* Asegura que ocupe todo el ancho */
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+/* Efecto sutil al pasar el mouse para que sea más interactivo
+.info-card:hover {
+    border-left: 5px solid var(--azul-medico);
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}*/
+
+.info-card h4 {
+    color: var(--azul-ejecutivo);
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+/* Mantenemos el badge azul */
+.badge {
+    background: var(--azul-ejecutivo);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 0.9em;
+}
+
+/* La alerta de urgencias sigue al final pero con el mismo ancho */
+.alerta-urgencias {
+    background: #fff5f5;
+    color: var(--rojo-alerta);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #feb2b2;
+    font-weight: bold;
+    margin-top: 5px;
+
+/* SECCIÓN DE ESPECIES (PERRO / GATO) LADO A LADO */
+.especies-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.especie-box {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    background: #fff;
+    border: 2px solid #ecf0f1;
+}
+
+.especie-box.dog { border-top: 5px solid #e67e22; }
+.especie-box.cat { border-top: 5px solid #9b59b6; }
+
+/* ALERTA DE URGENCIAS A TODO ANCHO */
+.alerta-urgencias {
+    grid-column: 1 / -1; /* Abarca todas las columnas */
+    background: #fff5f5;
+    color: var(--rojo-alerta);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #feb2b2;
+    font-weight: bold;
+}
+
+/* FORMULARIO DE REGISTRO EN DOS COLUMNAS */
+.inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.full-width { grid-column: 1 / -1; }
+
+label { font-weight: bold; color: var(--azul-ejecutivo); display: block; margin-bottom: 5px; }
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.btn-submit {
+    background: var(--azul-ejecutivo);
+    color: white;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: 0.3s;
+}
+
+.btn-submit:hover { background: var(--azul-medico); }
+
+.hidden { display: none; }
+
+/* Contenedor del formulario para que no se pegue a las instrucciones */
+form {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #eee;
+}
+
+/* Organizamos los inputs en 2 columnas */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Hacemos que el email y la especie ocupen todo el ancho por ser importantes */
+.full-column {
+    grid-column: 1 / -1;
+}
+
+/* Estilo para las secciones dinámicas */
+#div_gatos, #div_perros {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 20px;
+    border: 2px solid var(--azul-medico);
+    animation: fadeIn 0.5s; /* Efecto suave al aparecer */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* CORRECCIÓN DEFINITIVA PARA EL CHECKBOX */
+.checkbox-group {
+    display: flex !important; /* Asegura que el cuadro y el texto estén en la misma línea */
+    flex-direction: row !important;
+    align-items: center;
+    background: #eef6fc;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--azul-medico);
+    margin: 20px 0;
+}
+
+/* Esto evita que el checkbox herede el width: 100% de los otros inputs */
+.checkbox-group input[type="checkbox"] {
+    width: auto !important; /* ¡IMPORTANTE! Quita el 100% */
+    margin: 0 10px 0 0 !important; /* Espacio a la derecha */
+    flex-shrink: 0; /* Evita que se aplaste */
+}
+
+.checkbox-group span, .checkbox-group label {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline !important;
+    font-weight: normal;
+    color: var(--azul-ejecutivo);
+}

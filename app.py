@@ -1,14 +1,13 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, BooleanField, EmailField, SelectMultipleField, widgets
-from wtforms.validators import DataRequired, Email
 from forms import RegistroCitaForm
 import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mi_llave_secreta_123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///veterinaria.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///camp_vac_vet.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///veterinaria_nueva.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

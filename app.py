@@ -39,7 +39,7 @@ class MultiCheckboxField(SelectMultipleField):
 def index():
     form = RegistroCitaForm()
     if form.validate_on_submit():
-        # Lógica para elegir servicios según especie
+        # 1. Determinamos servicios y horario según la especie
         if form.especie.data == 'Perro':
             servicios_list = form.servicios_perro.data
             horario_seleccionado = form.horario_perro.data
@@ -47,7 +47,8 @@ def index():
             servicios_list = form.servicios_gato.data
             horario_seleccionado = form.horario_gato.data
 
-        # GUARDAR USANDO SQLAlchemy (Mucho más fácil)
+        # 2. CREAMOS EL OBJETO usando el modelo 'Cita'
+        # Nota: Asegúrate de usar los nombres de columna de tu clase Cita
         nueva_cita = Cita(
             email=form.email.data,
             tutor=form.tutor.data,
@@ -59,11 +60,15 @@ def index():
             horario=horario_seleccionado
         )
 
-        db.session.add(nueva_cita)
-        db.session.commit()
-
-        flash('¡Cita registrada con éxito!')
-        return redirect(url_for('admin'))
+        # 3. GUARDAMOS en la base de datos de forma profesional
+        try:
+            db.session.add(nueva_cita)
+            db.session.commit()
+            flash('¡Cita registrada con éxito!')
+            return redirect(url_for('admin'))
+        except Exception as e:
+            db.session.rollback()
+            return f"Error al guardar: {e}"
 
     return render_template('index.html', form=form)
 

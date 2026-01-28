@@ -22,11 +22,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = uri
 # Inicializar db con la app
 db.init_app(app)
 
-
 # Crear tabla
 with app.app_context():
+    from models import Cita  # <--- Importar aquí es clave
     db.create_all()
-    print("Base de datos y tablas creadas con éxito")
+    print("Tablas creadas en PostgreSQL con éxito")
+
+
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
@@ -89,3 +91,4 @@ def admin():
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
+# Intento final

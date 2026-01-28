@@ -13,6 +13,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///camp_vacu_vet.db'
 
 db = SQLAlchemy(app)
 
+
+# Crear tabla
+with app.app_context():
+    db.create_all()
+    print("Base de datos y tablas creadas con éxito")
+
+
 # --- MODELO ---
 class Cita(db.Model):
     __tablename__ = 'citas'
@@ -25,13 +32,6 @@ class Cita(db.Model):
     especie = db.Column(db.String(20))
     servicios = db.Column(db.String(500))
     horario = db.Column(db.String(100))
-
-
-
-# Crear tabla
-with app.app_context():
-    db.create_all()
-    print("Base de datos y tablas creadas con éxito")
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)

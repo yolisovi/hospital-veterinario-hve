@@ -1,6 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, BooleanField, EmailField, SelectMultipleField, widgets
+from wtforms.validators import DataRequired, Email
 from forms import RegistroCitaForm
 import os
 
@@ -37,8 +39,9 @@ class MultiCheckboxField(SelectMultipleField):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = RegistroCitaForm()
+
     if form.validate_on_submit():
-        # 1. Determinamos servicios y horario según la especie
+        # 1. Lógica de selección de datos
         if form.especie.data == 'Perro':
             servicios_list = form.servicios_perro.data
             horario_seleccionado = form.horario_perro.data
@@ -46,8 +49,7 @@ def index():
             servicios_list = form.servicios_gato.data
             horario_seleccionado = form.horario_gato.data
 
-        # 2. CREAMOS EL OBJETO usando el modelo 'Cita'
-        # Nota: Asegúrate de usar los nombres de columna de tu clase Cita
+        # 2. Creamos el objeto
         nueva_cita = Cita(
             email=form.email.data,
             tutor=form.tutor.data,
@@ -59,7 +61,7 @@ def index():
             horario=horario_seleccionado
         )
 
-        # 3. GUARDAMOS en la base de datos de forma profesional
+        # 3. Intentamos guardar (El bloque TRY debe estar completo)
         try:
             db.session.add(nueva_cita)
             db.session.commit()
@@ -67,7 +69,11 @@ def index():
             return redirect(url_for('admin'))
         except Exception as e:
             db.session.rollback()
-            return f"Error al guardar: {e}"
+            return f"Error de base de datos: {e}"
+
+    # 4. Detector de errores de formulario (FUERA del bloque try)
+    if request.method == 'POST' and not form.validate():
+        return f"Error de validación del formulario: {form.errors}"
 
     return render_template('index.html', form=form)
 

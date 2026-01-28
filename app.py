@@ -37,11 +37,13 @@ class MultiCheckboxField(SelectMultipleField):
 
 # --- RUTAS ---
 @app.route('/', methods=['GET', 'POST'])
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
     form = RegistroCitaForm()
 
     if form.validate_on_submit():
-        # 1. Lógica de selección de datos
+        # Selección de datos según especie
         if form.especie.data == 'Perro':
             servicios_list = form.servicios_perro.data
             horario_seleccionado = form.horario_perro.data
@@ -49,7 +51,7 @@ def index():
             servicios_list = form.servicios_gato.data
             horario_seleccionado = form.horario_gato.data
 
-        # 2. Creamos el objeto
+        # IMPORTANTE: Usamos la clase Cita (SQLAlchemy se encarga del nombre de la tabla)
         nueva_cita = Cita(
             email=form.email.data,
             tutor=form.tutor.data,
@@ -57,11 +59,10 @@ def index():
             mascota=form.mascota.data,
             edad=form.edad.data,
             especie=form.especie.data,
-            servicios=", ".join(servicios_list),
+            servicios=", ".join(servicios_list) if servicios_list else "Sin servicios",
             horario=horario_seleccionado
         )
 
-        # 3. Intentamos guardar (El bloque TRY debe estar completo)
         try:
             db.session.add(nueva_cita)
             db.session.commit()
@@ -69,13 +70,14 @@ def index():
             return redirect(url_for('admin'))
         except Exception as e:
             db.session.rollback()
-            return f"Error de base de datos: {e}"
+            # Este mensaje te dirá el error real si persiste
+            return f"Error de Base de Datos: {e}"
 
-    # 4. Detector de errores de formulario (FUERA del bloque try)
     if request.method == 'POST' and not form.validate():
-        return f"Error de validación del formulario: {form.errors}"
+        return f"Error de validación: {form.errors}"
 
     return render_template('index.html', form=form)
+
 
 @app.route('/admin')
 def admin():

@@ -8,15 +8,14 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mi_llave_secreta_123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///camp_vacu_vet.db'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///veterinaria_nueva.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///camp_vacu_vet.db'
 
 db = SQLAlchemy(app)
 
 # --- MODELO ---
 class Cita(db.Model):
-    __tablename__ = 'citas'  # <--- FUERZA EL NOMBRE AQUÍ
+    __tablename__ = 'citas'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100))
     tutor = db.Column(db.String(100))
@@ -24,12 +23,15 @@ class Cita(db.Model):
     mascota = db.Column(db.String(100))
     edad = db.Column(db.String(20))
     especie = db.Column(db.String(20))
-    servicios = db.Column(db.String(500)) # Subí el tamaño por los checkboxes
+    servicios = db.Column(db.String(500))
     horario = db.Column(db.String(100))
+
+
 
 # Crear tabla
 with app.app_context():
     db.create_all()
+    print("Base de datos y tablas creadas con éxito")
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)

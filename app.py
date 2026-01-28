@@ -8,7 +8,7 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mi_llave_secreta_123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///camp_vac_vet.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///camp_vacu_vet.db'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///veterinaria_nueva.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -16,6 +16,7 @@ db = SQLAlchemy(app)
 
 # --- MODELO ---
 class Cita(db.Model):
+    __tablename__ = 'citas'  # <--- FUERZA EL NOMBRE AQUÍ
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100))
     tutor = db.Column(db.String(100))
@@ -78,11 +79,16 @@ def index():
 
     return render_template('index.html', form=form)
 
-
 @app.route('/admin')
 def admin():
-    todas_las_citas = Cita.query.all()
+    try:
+        # Esto buscará específicamente la tabla 'citas'
+        todas_las_citas = Cita.query.all()
+    except Exception as e:
+        return f"Error al leer la base de datos: {e}"
+
     return render_template('admin.html', citas=todas_las_citas)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

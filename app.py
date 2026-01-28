@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, redirect, url_for, flash, request
-from flask_sqlalchemy import SQLAlchemy
+from database import db
+from models import Cita
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, BooleanField, EmailField, SelectMultipleField, widgets
 from wtforms.validators import DataRequired, Email
@@ -12,28 +13,15 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'mi_llave_secreta_123')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-# --- CONFIGURACIÓN DINÁMICA DE BASE DE DATOS ---
 # Si estamos en Render, usará DATABASE_URL. Si no, usará SQLite local.
 uri = os.environ.get('DATABASE_URL', 'sqlite:///camp_vacu_vet.db')
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
-db = SQLAlchemy(app)
+# Inicializar db con la app
+db.init_app(app)
 
-
-# --- MODELO ---
-class Cita(db.Model):
-    __tablename__ = 'citas'
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100))
-    tutor = db.Column(db.String(100))
-    telefono = db.Column(db.String(20))
-    mascota = db.Column(db.String(100))
-    edad = db.Column(db.String(20))
-    especie = db.Column(db.String(20))
-    servicios = db.Column(db.String(500))
-    horario = db.Column(db.String(100))
 
 # Crear tabla
 with app.app_context():

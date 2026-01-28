@@ -11,6 +11,6 @@ MarkupSafe==3.0.3
 Werkzeug==3.1.5
 WTForms==3.2.1
 gunicorn
-flask-sqlalchemy
+Flask-SQLAlchemy
 sqlalchemy
 psycopg2-binary

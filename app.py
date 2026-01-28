@@ -22,9 +22,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = uri
 # Inicializar db con la app
 db.init_app(app)
 
+from models import Cita  # <--- Importar aquí es clave
+
 # Crear tabla
 with app.app_context():
-    from models import Cita  # <--- Importar aquí es clave
     db.create_all()
     print("Tablas creadas en PostgreSQL con éxito")
 

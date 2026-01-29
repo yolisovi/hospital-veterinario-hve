@@ -69,7 +69,6 @@
             </div>
         </div>
 
-
         <form action="{{ url_for('index') }}" method="POST">
             {{ form.hidden_tag() }}
 
@@ -79,10 +78,21 @@
                     {{ form.email(placeholder="ejemplo@correo.com") }}
                 </div>
 
-                <div>
-                    {{ form.tutor.label }}
-                    {{ form.tutor() }}
+                <div class="contenedor-nombres-fila">
+                    <div class="grupo-input">
+                        {{ form.nombre.label }}
+                        {{ form.nombre(placeholder="Nombre") }}
+                    </div>
+                    <div class="grupo-input">
+                        {{ form.apellido1.label }}
+                        {{ form.apellido1(placeholder="Apellido 1") }}
+                    </div>
+                    <div class="grupo-input">
+                        {{ form.apellido2.label }}
+                        {{ form.apellido2(placeholder="Apellido 2") }}
+                    </div>
                 </div>
+            </div>
 
                 <div>
                     {{ form.telefono.label }}
@@ -103,7 +113,7 @@
                     {{ form.especie.label }}
                     {{ form.especie(onchange="toggleEspecie()") }}
                 </div>
-            </div>
+
 
             <div id="div_gatos" class="hidden">
                 <h3>Servicios para Gatos</h3>

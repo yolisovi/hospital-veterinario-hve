@@ -9,7 +9,9 @@ class MultiCheckboxField(SelectMultipleField):
 class RegistroCitaForm(FlaskForm):
     email = EmailField('Correo electrónico *', validators=[DataRequired(), Email()])
     confirmacion = BooleanField('Confirmo condiciones', validators=[DataRequired()])
-    tutor = StringField('Nombre Tutor', validators=[DataRequired()])
+    nombre = StringField('Nombre', validators=[DataRequired()])
+    apellido1 = StringField('Primer Apellido', validators=[DataRequired()])
+    apellido2 = StringField('Segundo Apellido') # Sin DataRequired si es opcional
     telefono = StringField('Teléfono', validators=[DataRequired()])
     mascota = StringField('Nombre Mascota', validators=[DataRequired()])
     edad = StringField('Edad', validators=[DataRequired()])

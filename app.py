@@ -42,31 +42,23 @@ class MultiCheckboxField(SelectMultipleField):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    # 1. Obtenemos las variables de control
+    mantenimiento = os.environ.get('MODO_MANTENIMIENTO', 'ON').strip()
+    acceso_secreto = request.args.get('acceso', '')
 
-    # Si no hay nada en la URL, acceso_secreto valdrá None (vacío)
-    acceso_secreto = request.args.get('acceso')
+    # DEBUG para ver en Render logs
+    print(f"--- ESTADO: {mantenimiento} | TOKEN RECIBIDO: {acceso_secreto} ---")
 
-    # .strip() elimina espacios accidentales que a veces se cuelan en Render
-    mantenimiento = os.environ.get('MODO_MANTENIMIENTO', 'OFF').strip()
-    acceso_secreto = request.args.get('acceso', '').strip()
+    # 2. BLOQUEO: Si mantenimiento está en ON y el token no es el correcto
+    if mantenimiento == 'ON' and acceso_secreto != "hve2026":
+        return """
+        <div style='text-align:center; margin-top:100px; font-family:sans-serif;'>
+            <h1>SITIO EN MANTENIMIENTO</h1>
+            <p>Estamos preparando la campaña de vacunación. Vuelve pronto.</p>
+        </div>
+        """, 503
 
-    TOKEN_SECRETO = "hve2026"
-
-    # Agregamos un print para que puedas ver en los LOGS de Render qué está pasando
-    print(f"DEBUG: Mantenimiento esta {mantenimiento}")
-
-    if mantenimiento == 'ON' and acceso_secreto != TOKEN_SECRETO:
-        # Si quieres usar un HTML, asegúrate de que el archivo exista en /templates
-        # return render_template('mantenimiento.html'), 503
-        return "<h1>SITIO EN MANTENIMIENTO</h1><p>Vuelve pronto.</p>", 503
-
-    # 4. Si el mantenimiento está en 'OFF' o tienes el 'acceso', carga el formulario
-        form = RegistroCitaForm()
-
-    # O si la variable de entorno está activa
-    if os.environ.get('MANTENIMIENTO') == 'ON' and not acceso_autorizado:
-        return "<h1>Sitio en mantenimiento</h1><p>Próximamente más información.</p>", 503
-    #return render_template('mantenimiento.html') #pagina temporal
+    # 3. Si pasó el bloqueo, continuamos con el formulario
     form = RegistroCitaForm()
 
     if form.validate_on_submit():

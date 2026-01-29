@@ -42,14 +42,14 @@ class MultiCheckboxField(SelectMultipleField):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # 1. Obtenemos las variables de control
+    # 1. Variables de control
     mantenimiento = os.environ.get('MODO_MANTENIMIENTO', 'ON').strip()
     acceso_secreto = request.args.get('acceso', '')
 
-    # DEBUG para ver en Render logs
-    print(f"--- ESTADO: {mantenimiento} | TOKEN RECIBIDO: {acceso_secreto} ---")
+    # Esto DEBE aparecer en los logs si el deploy tiene éxito
+    print(f"--- EJECUTANDO INDEX | ESTADO: {mantenimiento} | TOKEN: {acceso_secreto} ---")
 
-    # 2. BLOQUEO: Si mantenimiento está en ON y el token no es el correcto
+    # 2. Bloqueo de mantenimiento
     if mantenimiento == 'ON' and acceso_secreto != "hve2026":
         return """
         <div style='text-align:center; margin-top:100px; font-family:sans-serif;'>
@@ -58,7 +58,7 @@ def index():
         </div>
         """, 503
 
-    # 3. Si pasó el bloqueo, continuamos con el formulario
+    # 3. Formulario (Solo se ejecuta si pasa el bloqueo)
     form = RegistroCitaForm()
 
     if form.validate_on_submit():

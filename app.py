@@ -51,12 +51,7 @@ def index():
 
     # 2. Bloqueo de mantenimiento
     if mantenimiento == 'ON' and acceso_secreto != "hve2026":
-        return """
-        <div style='text-align:center; margin-top:100px; font-family:sans-serif;'>
-            <h1>SITIO EN MANTENIMIENTO</h1>
-            <p>Estamos preparando la campaña de vacunación. Vuelve pronto.</p>
-        </div>
-        """, 503
+        return render_template('mantenimiento.html')
 
     # 3. Formulario (Solo se ejecuta si pasa el bloqueo)
     form = RegistroCitaForm()

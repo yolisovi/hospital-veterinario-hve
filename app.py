@@ -46,24 +46,19 @@ def index():
     # Si no hay nada en la URL, acceso_secreto valdrá None (vacío)
     acceso_secreto = request.args.get('acceso')
 
-    # 1. Revisar si el mantenimiento está encendido en Render
-    mantenimiento = os.environ.get('MODO_MANTENIMIENTO', 'OFF')
+    # .strip() elimina espacios accidentales que a veces se cuelan en Render
+    mantenimiento = os.environ.get('MODO_MANTENIMIENTO', 'OFF').strip()
+    acceso_secreto = request.args.get('acceso', '').strip()
 
-    # 2. Revisar si tú estás entrando con el link secreto, Ejemplo: tu-web.com/?acceso=hve2026
-    # Solo si entras con un "token" secreto en la URL
-    acceso_autorizado = request.args.get('token') == "mi_clave_privada"
+    TOKEN_SECRETO = "hve2026"
 
+    # Agregamos un print para que puedas ver en los LOGS de Render qué está pasando
+    print(f"DEBUG: Mantenimiento esta {mantenimiento}")
 
-    # 3. Bloqueo de seguridad
-    if mantenimiento == 'ON' and acceso_secreto != "hve2026":
-        return """
-        <div style="text-align:center; margin-top:100px; font-family:sans-serif; color:#2c3e50;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3024/3024509.png" width="80">
-            <h1>Sitio en Mantenimiento</h1>
-            <p>Estamos preparando la Campaña de Vacunación 2026.</p>
-            <p><strong>Vuelve pronto para agendar tu cita.</strong></p>
-        </div>
-        """, 503
+    if mantenimiento == 'ON' and acceso_secreto != TOKEN_SECRETO:
+        # Si quieres usar un HTML, asegúrate de que el archivo exista en /templates
+        # return render_template('mantenimiento.html'), 503
+        return "<h1>SITIO EN MANTENIMIENTO</h1><p>Vuelve pronto.</p>", 503
 
     # 4. Si el mantenimiento está en 'OFF' o tienes el 'acceso', carga el formulario
         form = RegistroCitaForm()

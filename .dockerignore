@@ -1,0 +1,11 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.git/
+instance/
+migrations/
+proyecto.zip
+*.db
+uv.lock
+pyproject.toml

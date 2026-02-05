@@ -1,20 +1,20 @@
-# Usa una imagen ligera de Python
+# Imagen base de Python
 FROM python:3.11-slim
 
-# Instala uv para gestionar dependencias rápido
+# Instalamos uv para que la instalación sea ultra rápida
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Establece el directorio de trabajo
+# Directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de dependencias primero (para aprovechar el cache)
+# Copiamos solo el archivo de requerimientos primero
 COPY requirements.txt .
 
-# Instala las dependencias
+# Instalamos las librerías necesarias
 RUN uv pip install --system -r requirements.txt
 
-# Copia TODO el contenido de tu carpeta actual al contenedor
+# Copiamos todo el código (el .dockerignore filtrará lo que no sirve)
 COPY . .
 
-# Comando para arrancar la app
+# Comando para arrancar. Usamos 0.0.0.0 para que Render pueda entrar al contenedor
 CMD ["python", "app.py"]

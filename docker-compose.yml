@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:15
+    container_name: vet_db
+    restart: always
+    environment:
+      POSTGRES_USER: user_vet
+      POSTGRES_PASSWORD: password_seguro
+      POSTGRES_DB: camp_vacu_vet
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: vet_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user_vet:password_seguro@db:5432/camp_vacu_vet
+      - FLASK_ENV=production
+      - SECRET_KEY=tu_llave_muy_secreta
+    depends_on:
+      - db
+    volumes:
+      - ./hospvet/static/uploads:/app/hospvet/static/uploads
+
+volumes:
+  postgres_data:

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento Veterinaria 🐾</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f0f9ff; /* Azul muy clarito */
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #334155;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            border-bottom: 8px solid #10b981; /* Verde veterinaria */
+        }
+
+        .pet-icons {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .dog { animation: bounce 2s infinite; }
+        .cat { animation: bounce 2s infinite 0.5s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #065f46;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .status-badge {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .footprints {
+            margin-top: 20px;
+            color: #cbd5e1;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="pet-icons">
+            <span class="dog">🐶</span>
+            <span class="cat">🐱</span>
+        </div>
+
+        <div class="status-badge">Próxima Campaña de Vacunación</div>
+
+        <h1>¡Estamos preparando algo especial!</h1>
+
+        <p>En este momento estamos mejorando nuestra plataforma para cuidar mejor a tus peluditos. Volveremos muy pronto.</p>
+
+        <div class="footprints">🐾 🐾 🐾</div>
+    </div>
+
+</body>
+</html>

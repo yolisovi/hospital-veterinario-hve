@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HVE - Panel de Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        th {
+            background-color: var(--azul-ejecutivo);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            color: #444;
+        }
+        tr:hover { background-color: #f8f9fa; }
+        .especie-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        .tag-perro { background: #fff3e0; color: #e67e22; }
+        .tag-gato { background: #f3e5f5; color: #9b59b6; }
+        .btn-volver {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: var(--azul-medico);
+            font-weight: bold;
+        }
+
+        .btn-comprobante {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .btn-comprobante:hover {
+            background-color: #218838;
+        }
+        .text-muted {
+            color: #6c757d;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="/" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver al registro</a>
+        <h1><i class="fas fa-clipboard-list"></i> Citas Registradas</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Mascota</th>
+                    <th>Especie</th>
+                    <th>Tutor / Contacto</th>
+                    <th>Servicios</th>
+                    <th>Día y Horario</th> <th>Costo</th> <th>Pago</th> </tr>
+
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.id }}</td>
+                    <td><strong>{{ cita.mascota }}</strong> ({{ cita.edad }})</td>
+                    <td>
+                        <span class="especie-tag {{ 'tag-perro' if cita.especie == 'Perro' else 'tag-gato' }}">
+                            {{ cita.especie }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ cita.nombre }} {{ cita.apellido1 }}<br>
+                        <small><i class="fas fa-phone"></i> {{ cita.telefono }}</small><br>
+                        <small><i class="fas fa-envelope"></i> {{ cita.email }}</small>
+                    </td>
+                    <td><small>{{ cita.servicios }}</small></td>
+
+                    <td>{{ cita.dia_semana }}<br><small>{{ cita.bloque_horario }}</small></td>
+
+                    <td><strong>${{ "%.2f"|format(cita.costo_total) }}</strong></td>
+
+                    <td>
+                        {% if cita.comprobante_filename %}
+                        <a href="{{ url_for('static', filename='uploads/' + cita.comprobante_filename) }}"
+                           target="_blank" class="btn-comprobante">
+                            <i class="fas fa-file-invoice-dollar"></i> Ver
+                        </a>
+                        {% else %}
+                        <span class="text-muted">Sin archivo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

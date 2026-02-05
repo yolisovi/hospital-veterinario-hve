@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HVX - Campaña de Vacunación</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <header class="main-header">
+            <div class="header-container" style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px;">
+                <img src="{{ url_for('static', filename='img/logo_hve_1.jpeg') }}" alt="Logo Izquierdo" class="logo-img" style="height: 80px; width: auto;">
+
+                <div class="header-text" style="text-align: center; flex-grow: 1;">
+                    <h1 style="margin: 0; font-size: 1.8rem; color: #004a99;">Campaña de Vacunación 26 I</h1>
+                    <p style="margin: 0; color: #666;">Hospital Veterinario de Especialidades</p>
+                </div>
+
+                <img src="{{ url_for('static', filename='img/logo_hve_2.jpeg') }}" alt="Logo Derecho" class="logo-img" style="height: 80px; width: auto;">
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success" style="padding: 15px; background-color: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 20px;">
+                  {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="info-grid-principal">
+            <div class="info-card">
+                <h4>1. Completa todos los campos solicitados con la información correspondiente.</h4>
+                <p> Es importante que los datos sean correctos para confirmar tu cita y brindar una mejor atención.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>2. Selecciona los servicios de tu interés.</h4>
+                <p> Puedes elegir más de una opción según las necesidades de tu animal de compañía.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>3. Duración de la cita.</h4>
+                <p> Cada cita tiene una duración de <strong>1 hora</strong>.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>4. Consulta gratuita:</h4>
+                <ul class="card-list">
+                    <li>La consulta constará de una revisión médica <strong>gratuita</strong>.</li>
+                    <li>Solo se aplicarán vacunas si el animal se encuentra sano tras la valoración.</li>
+                    <li>En el caso de perros, además, un hemograma y un urianálisis.</li>
+                </ul>
+            </div>
+
+            <div class="info-card dog-highlight">
+                <h4>5. Indicaciones EXCLUSIVAMENTE PARA PERROS</h4>
+                <p> Además de la consulta gratuita, <strong>si usted lo autoriza</strong>, se tomará una muestra sanguínea para biometría hemática; y se realizará un urianálisis.</p>
+                <p> Indicaciones para biometría hemática: <strong>Ayuno de 6 horas</strong></p>
+                <p> Indicaciones para urianálisis: <strong>Colecta de orina 1 hora</strong> antes de la cita en frasco limpio y protegido de la luz.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>6. Indicaciones para el ingreso:</h4>
+                <p><strong> Perros:</strong> deben ingresar con <strong>collar y correa.</strong></p>
+                <p><strong> Gatos:</strong> deben asistir en <strong>transportadora y premios para su manejo.</strong></p>
+            </div>
+
+            <div class="info-card">
+                <h4>7. Agenda:</h4>
+                <p> Elige el <strong>día y horario</strong> que mejor se adapte a tu disponibilidad.</p>
+                <p> Si tienes <strong>más de un animal de compañía,</strong> deberás <strong>registrar a cada una por separado.</strong></p>
+            </div>
+            <div class="info-card">
+                <h4>8. Tabulador de Costos de Recuperación:</h4>
+                <div class="contenedor-tablas-dual">
+                    <div class="tabla-container">
+                        <h5 class="titulo-tabla-perro">Costos Perros</h5>
+                        <table class="costos-table">
+                            <thead>
+                                <tr>
+                                    <th>Servicio</th>
+                                    <th>Normal</th>
+                                    <th>Pago anticipado <br> (09-11 Feb)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Vacuna múltiple y Desparasitación Externa</td>
+                                    <td>$513.00</td>
+                                    <td>$570.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna múltiple y Desparasitación Interna</td>
+                                    <td>$360.00</td>
+                                    <td>$400.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna Rabia, Desparasitación Interna y Externa</td>
+                                    <td>$585.00</td>
+                                    <td>$650.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Desparasitación Interna y Externa</td>
+                                    <td>$540.00</td>
+                                    <td>$600.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna múltiple y Rabia</td>
+                                    <td>$360.00</td>
+                                    <td>$400.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna cuádruple, Vacuna múltiple y Rabia</td>
+                                    <td>$675.00</td>
+                                    <td>$750.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna cuádruple, Vacuna múltiple y Rabia, Desp. Int. y Ext.</td>
+                                    <td>$855.00</td>
+                                    <td>$950.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna Bordetella</td>
+                                    <td>$270.00</td>
+                                    <td>$300.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna Rabia</td>
+                                    <td>$225.00</td>
+                                    <td>$250.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna séxtuple</td>
+                                    <td>$405.00</td>
+                                    <td>$450.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Vacuna cuádruple</td>
+                                    <td>$360.00</td>
+                                    <td>$400.00</td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <td colspan="3"><strong>Desparasitaciones según peso (Perros)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Interna (Menor a 10Kg)</td>
+                                    <td>$216.00</td>
+                                    <td>$240.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Interna (10Kg hasta 20Kg)</td>
+                                    <td>$252.00</td>
+                                    <td>$280.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Interna (Mayor a 20Kg)</td>
+                                    <td>$270.00</td>
+                                    <td>$300.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Externa (Menor a 10Kg)</td>
+                                    <td>$180.00</td>
+                                    <td>$200.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Externa (10Kg hasta 20Kg)</td>
+                                    <td>$225.00</td>
+                                    <td>$250.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Externa (Mayor a 20Kg)</td>
+                                    <td>$270.00</td>
+                                    <td>$300.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="tabla-container">
+                        <h5 class="titulo-tabla-gato">Costos Gatos</h5>
+                        <table class="costos-table">
+                            <thead>
+                                <tr>
+                                    <th>Servicio</th>
+                                    <th>Normal</th>
+                                    <th>Pago anticipado <br> (09-11 Feb)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>V. Cuádruple + Desp. Comp</td><td>$560</td><td>$504</td></tr>
+                                <tr><td>Prueba VIF/Leucemia</td><td>$890</td><td>$801</td></tr>
+                                <tr><td>V. Rabia + Desp. Comp</td><td>$450</td><td>$405</td></tr>
+                                <tr><td>V. Cuádruple Felina</td><td>$350</td><td>$315</td></tr>
+                                <tr><td>Desp. Int. y Ext.</td><td>$400</td><td>$360</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="alerta-urgencias">
+                <strong><i class="fas fa-exclamation-triangle"></i> IMPORTANTE:</strong>
+                <p>• No se atenderán casos de urgencia.</p>
+                <p>• Si tu animal de compañía presenta signos de enfermedad, no asistas y consulta con un
+                médico veterinario de inmediato.</p>
+                <p>• Las fechas y horarios estarán sujetos a disponibilidad</p>
+            </div>
+        </div>
+
+
+        <form action="{{ url_for('campvacuna.campvacini') }}" method="POST" enctype="multipart/form-data">
+
+            {{ form.hidden_tag() }}
+
+            <div class="form-grid">
+
+                <div class="full-column">
+                    {{ form.email.label }}
+                    {{ form.email(placeholder="ejemplo@correo.com") }}
+                </div>
+
+                <div class="contenedor-nombres-fila full-column" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+
+                    <div class="grupo-input">
+                        {{ form.nombre.label }}
+                        {{ form.nombre(placeholder="Nombre") }}
+                    </div>
+
+                    <div class="grupo-input">
+                        {{ form.apellido1.label }}
+                        {{ form.apellido1(placeholder="Apellido 1") }}
+                    </div>
+
+                    <div class="grupo-input">
+                        {{ form.apellido2.label }}
+                        {{ form.apellido2(placeholder="Apellido 2") }}
+                    </div>
+
+                </div>
+
+                <div class="grupo-input">
+                    {{ form.mascota.label }}
+                    {{ form.mascota(placeholder="Nombre de la mascota") }}
+                </div>
+
+                <div class="grupo-input">
+                    {{ form.edad.label }}
+                    {{ form.edad(placeholder="Edad") }}
+                </div>
+
+                <div class="grupo-input">
+                    {{ form.telefono.label }}
+                    {{ form.telefono(placeholder="10 dígitos", type="tel") }}
+                </div>
+
+                <div class="full-column">
+                    {{ form.especie.label }}
+                    {{ form.especie(onchange="toggleEspecie()", id="especie") }}
+                </div>
+
+                <div id="div_gatos" class="hidden full-column">
+                    <h3 style="color: #2c3e50; margin-top: 20px;">Servicios para Gatos</h3>
+
+                    <div class="checkbox-list-container">
+                        {{ form.servicios_gato() }}
+                    </div>
+
+                </div>
+
+                <div id="div_perros" class="hidden full-column">
+                    <h3 style="color: #2c3e50; margin-top: 20px; text-align: center;">Servicios para Perros</h3>
+
+                    <div class="checkbox-list-container">
+                        {{ form.servicios_perro() }}
+                    </div>
+
+                    <div class="seccion-pesos-container" style="width: 100%; margin: 30px 0; display: flex; justify-content: center;">
+                        <div class="fila-pesos" style="display: flex; gap: 30px; width: 100%; max-width: 1000px;">
+
+                            <div class="grupo-input" style="flex: 1; min-width: 0;">
+                                <label style="text-align: center; display: block; margin-bottom: 15px; width: 100%;">
+                                    <strong>{{ form.rango_peso_perro_interno.label }}</strong>
+                                </label>
+                                <div class="radio-group-vertical">
+                                    {% for subfield in form.rango_peso_perro_interno %}
+                                        <label class="radio-item">
+                                            {{ subfield }}
+                                            <span>{{ subfield.label.text }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="grupo-input" style="flex: 1; min-width: 0;">
+                                <label style="text-align: center; display: block; margin-bottom: 15px; width: 100%;">
+                                    <strong>{{ form.rango_peso_perro_externo.label }}</strong>
+                                </label>
+                                <div class="radio-group-vertical">
+                                    {% for subfield in form.rango_peso_perro_externo %}
+                                        <label class="radio-item">
+                                            {{ subfield }}
+                                            <span>{{ subfield.label.text }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contenedor-nombres-fila full-column" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <h3 style="color: #2c3e50; margin-top: 20px;">Selecciona el día y hora de la cita</h3>
+                    <div class="grupo-input">
+                        {{ form.dia_semana.label }}
+                        {{ form.dia_semana() }}
+                    </div>
+
+                    <div class="grupo-input">
+                        {{ form.bloque_horario.label }}
+                        {{ form.bloque_horario() }}
+                    </div>
+                </div>
+
+
+                <div class="full-column">
+                    <div class="checkbox-group" style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
+                        {{ form.confirmacion() }}
+                        <label style="margin: 0;">{{ form.confirmacion.label.text }}</label>
+                    </div>
+                </div>
+
+                <div class="full-column" style="margin-top: 20px;">
+                    <label><strong>9. Subir Comprobante de Pago (Obligatorio):</strong></label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="comprobante_pago" name="comprobante_pago"
+                               accept=".pdf, .jpg, .jpeg, .png" required>
+
+                        <button type="button" id="btn-quitar-archivo" class="hidden"
+                                style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer;">
+                            ✕ Quitar archivo seleccionado
+                        </button>
+
+                        <p id="nombre-archivo" style="font-size: 0.9rem; color: #2c3e50; margin-top: 5px;"></p>
+                    </div>
+                </div>
+
+                 {{ form.submit(class="btn-submit") }}
+            </div>
+        </form>
+
+        <script>
+            function toggleEspecie() {
+                const selector = document.getElementById("especie");
+                const especie = selector.value;
+
+                const divGatos = document.getElementById("div_gatos");
+                const divPerros = document.getElementById("div_perros");
+                const tPerro = document.getElementById("tabla_costos_perro");
+                const tGato = document.getElementById("tabla_costos_gato");
+
+                divGatos.classList.toggle("hidden", especie !== "Gato");
+                divPerros.classList.toggle("hidden", especie !== "Perro");
+
+                if(tGato) tGato.classList.toggle("hidden", especie !== "Gato");
+                if(tPerro) tPerro.classList.toggle("hidden", especie !== "Perro");
+            }
+
+            function validarRegistro() {
+                const fileInput = document.getElementById('comprobante_pago');
+                const submitBtn = document.querySelector('.btn-submit');
+                const checkConfirm = document.getElementById('confirmacion');
+
+                const tieneArchivo = fileInput && fileInput.files.length > 0;
+                // Si no tienes checkbox de confirmación, esto siempre será true
+                const estaConfirmado = checkConfirm ? checkConfirm.checked : true;
+
+                if (tieneArchivo && estaConfirmado) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = "0.5";
+                }
+            }
+
+            // Ejecutar al cargar la página
+            window.onload = function() {
+                toggleEspecie();
+                validarRegistro();
+            };
+
+            // --- IMPORTANTE: Escuchar cambios en el input de archivo ---
+            document.addEventListener('change', function(e) {
+                if (e.target.id === 'comprobante_pago' || e.target.id === 'confirmacion') {
+                    validarRegistro();
+                }
+            });
+
+            // Agrega esto dentro de tu etiqueta <script> existente
+            document.addEventListener('change', function(e) {
+                if (e.target.id === 'comprobante_pago') {
+                    const btnQuitar = document.getElementById('btn-quitar-archivo');
+                    const infoNombre = document.getElementById('nombre-archivo');
+
+                    if (e.target.files.length > 0) {
+                        // Mostrar nombre del archivo y botón de quitar
+                        infoNombre.textContent = "Seleccionado: " + e.target.files[0].name;
+                        btnQuitar.classList.remove('hidden');
+                    }
+                    validarRegistro(); // Tu función que habilita/deshabilita el botón de enviar
+                }
+            });
+
+            // Lógica para el botón de quitar
+            document.getElementById('btn-quitar-archivo').addEventListener('click', function() {
+                const fileInput = document.getElementById('comprobante_pago');
+                const infoNombre = document.getElementById('nombre-archivo');
+
+                fileInput.value = ""; // Limpia el archivo del input
+                infoNombre.textContent = ""; // Borra el texto
+                this.classList.add('hidden'); // Oculta este botón
+
+                validarRegistro(); // Vuelve a desactivar el botón de envío
+            });
+
+            // Lógica de deselección de Radio Buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('click', function() {
+                    if (this.previousValue === 'true') {
+                        this.checked = false;
+                        this.previousValue = 'false';
+                    } else {
+                        document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
+                            r.previousValue = 'false';
+                        });
+                        this.previousValue = 'true';
+                    }
+                });
+            });
+
+            // Recibimos la lista de horarios agotados desde Flask
+                const horariosAgotados = {{ horarios_llenos | tojson }};
+
+                function filtrarHorarios() {
+                    const especieActiva = document.querySelector('input[name="especie"]:checked')?.value;
+                    const diaSeleccionado = document.getElementById('dia_semana').value;
+                    const selectHorario = document.getElementById('bloque_horario');
+
+                    if (!especieActiva || !diaSeleccionado) return;
+
+                    // Revisamos cada opción del selector de horas
+                    Array.from(selectHorario.options).forEach(option => {
+                        // Creamos la "llave" igual a como la generamos en Python: "Perro|LUNES 16|10:00 - 11:00"
+                        const llaveBusqueda = `${especieActiva}|${diaSeleccionado}|${option.value}`;
+
+                        if (horariosAgotados.includes(llaveBusqueda)) {
+                            option.disabled = true;
+                            option.style.color = '#ccc';
+                            option.text = option.value + " (AGOTADO)";
+                        } else {
+                            option.disabled = false;
+                            option.style.color = '#000';
+                            option.text = option.value;
+                        }
+                    });
+                }
+
+                // Escuchar cambios en especie y día
+                document.querySelectorAll('input[name="especie"]').forEach(radio => {
+                    radio.addEventListener('change', filtrarHorarios);
+                });
+                document.getElementById('dia_semana').addEventListener('change', filtrarHorarios);
+        </script>
+</body>
+</html>

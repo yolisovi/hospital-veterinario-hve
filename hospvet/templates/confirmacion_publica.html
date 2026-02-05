@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Confirmación de Cita - Hospvet</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/styles.css') }}"
+        />
+        <style>
+            .ticket-container {
+                max-width: 600px;
+                margin: 40px auto;
+                padding: 20px;
+                background: #fdfdfd;
+                border: 2px solid #333;
+                border-radius: 8px;
+                box-shadow: 10px 10px 0px #888;
+                font-family: "Courier New", Courier, monospace;
+            }
+            .header {
+                text-align: center;
+                border-bottom: 2px dashed #333;
+                padding-bottom: 10px;
+            }
+            .detalle-fila {
+                display: flex;
+                justify-content: space-between;
+                margin: 10px 0;
+            }
+            .total {
+                font-size: 1.4rem;
+                font-weight: bold;
+                text-align: right;
+                border-top: 2px solid #333;
+                padding-top: 10px;
+            }
+            .no-imprimir {
+                text-align: center;
+                margin-top: 20px;
+            }
+            @media print {
+                .no-imprimir,
+                .btn-submit {
+                    display: none !important;
+                }
+                .ticket-container {
+                    box-shadow: none;
+                    border: 1px solid #000;
+                    margin: 0;
+                }
+                body {
+                    background: white;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ticket-container">
+            <div class="header">
+                <h2>HOSPVET</h2>
+                <p>Comprobante de Registro</p>
+                <p>Folio: #{{ cita.id }}</p>
+            </div>
+
+            <div class="detalle">
+                <div class="detalle-fila">
+                    <span>Mascota:</span> <strong>{{ cita.mascota }}</strong>
+                </div>
+                <div class="detalle-fila">
+                    <span>Especie:</span> <span>{{ cita.especie }}</span>
+                </div>
+                <div class="detalle-fila">
+                    <span>Tutor:</span>
+                    <span>{{ cita.nombre }} {{ cita.apellido1 }}</span>
+                </div>
+                <div class="detalle-fila">
+                    <span>Fecha:</span> <strong>{{ cita.dia_semana }}</strong>
+                </div>
+                <div class="detalle-fila">
+                    <span>Horario:</span>
+                    <strong>{{ cita.bloque_horario }}</strong>
+                </div>
+                <hr />
+                <p><strong>Servicios:</strong></p>
+                <div
+                    class="servicios-container"
+                    style="margin-top: 15px; text-align: left"
+                >
+                    <strong
+                        style="
+                            display: block;
+                            border-bottom: 1px solid #ddd;
+                            margin-bottom: 8px;
+                            padding-bottom: 5px;
+                        "
+                    >
+                        Servicios Registrados:
+                    </strong>
+                    <ul style="list-style: none; padding-left: 0; margin: 0">
+                        {% for servicio in cita.servicios.split(', ') %}
+                        <li
+                            style="
+                                padding: 4px 0;
+                                border-bottom: 1px dashed #eee;
+                                font-size: 0.95em;
+                                color: #333;
+                            "
+                        >
+                            <span style="color: #2c3e50">✔</span> {{ servicio }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!--<div class="total">
+                Total Estimado: ${{ "%.2f"|format(cita.costo_total) }}
+            </div>-->
+
+            <div class="no-imprimir">
+                <button onclick="window.print()" class="btn-submit">
+                    Imprimir o Guardar PDF
+                </button>
+                <p>
+                    <small>Presenta este comprobante el día de tu cita.</small>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

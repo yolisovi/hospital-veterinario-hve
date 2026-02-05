@@ -1,0 +1,6 @@
+GIT HUB.txt
+*.txt
+instance/
+.venv/
+__pycache__/
+*.db

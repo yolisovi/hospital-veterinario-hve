@@ -3,26 +3,26 @@ from wtforms import BooleanField, IntegerField, RadioField, SelectField, SelectM
 from wtforms.validators import DataRequired, Email, Regexp, ValidationError
 import os
 import csv
-from hospvet.models import Cita # Asegúrate de que la ruta a tu modelo sea correcta
+from hospvet.models import Cita
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
 class RegistroCitaForm(FlaskForm):
-    # --- DATOS DEL DUEÑO ---
+
     email = StringField('Correo Electrónico', validators=[DataRequired(message="El correo es obligatorio"), Email(message="Ingresa un correo válido")])
     nombre = StringField('Nombre del Dueño', validators=[DataRequired()])
     apellido1 = StringField('Primer Apellido', validators=[DataRequired()])
     apellido2 = StringField('Segundo Apellido')
     telefono = StringField('Teléfono de contacto', validators=[DataRequired(message="El teléfono es obligatorio"), Regexp(r'^\d{10}$', message="El teléfono debe tener exactamente 10 dígitos numéricos.")])
 
-    # --- DATOS DE LA MASCOTA ---
+
     mascota = StringField('Nombre de la Mascota', validators=[DataRequired()])
     edad = IntegerField('Edad de la Mascota (Años)', validators=[DataRequired()])
     especie = SelectField('Especie', choices=[('', 'Seleccione especie'), ('Perro', 'Perro'), ('Gato', 'Gato')], validators=[DataRequired()])
 
-# --- AGENDA ---# --- AGENDA ---
+
     dia_semana = SelectField('Día', choices=[
         ('Lunes 16', 'Lunes 16 de Febrero'),
         ('Martes 17', 'Martes 17 de Febrero'),
@@ -36,18 +36,19 @@ class RegistroCitaForm(FlaskForm):
         ('Viernes 27', 'Viernes 27 de Febrero')
     ], validators=[DataRequired()])
 
+
     bloque_horario = SelectField('Hora', choices=[
         ('', 'Seleccione un horario'),
-        ('10:00 - 11:00', '10:00 AM - 11:00 AM (Solo Perros)'),
-        ('11:00 - 12:00', '11:00 AM - 12:00 PM (Solo Perros)'),
-        ('12:00 - 13:00', '12:00 PM - 01:00 PM (Solo Gatos)'),
-        ('13:00 - 14:00', '01:00 PM - 02:00 PM (Solo Gatos)'),
-        ('15:00 - 16:00', '03:00 PM - 04:00 PM (Perros y Gatos)'),
-        ('16:00 - 17:00', '04:00 PM - 05:00 PM (Perros y Gatos)'),
-        ('17:00 - 18:00', '05:00 PM - 06:00 PM (Perros y Gatos)')
+        ('10:00 - 11:00', '10:00 AM - 11:00 AM'),
+        ('11:00 - 12:00', '11:00 AM - 12:00 PM'),
+        ('12:00 - 13:00', '12:00 PM - 01:00 PM'),
+        ('13:00 - 14:00', '01:00 PM - 02:00 PM'),
+        ('15:00 - 16:00', '03:00 PM - 04:00 PM'),
+        ('16:00 - 17:00', '04:00 PM - 05:00 PM'),
+        ('17:00 - 18:00', '05:00 PM - 06:00 PM')
     ], validators=[DataRequired()])
 
-    # --- SERVICIOS ---
+
     servicios_perro = MultiCheckboxField('Servicios para Perros', choices=[
         ('v_multiple_desp_externa', 'Vacuna múltiple y Desparasitación Externa'),
         ('v_multiple_desp_interna', 'Vacuna múltiple y Desparasitación Interna'),
@@ -89,7 +90,7 @@ class RegistroCitaForm(FlaskForm):
     comprobante_pago = FileField('Comprobante de Pago')
     submit = SubmitField('Registrar Cita')
 
-    # --- VALIDACIÓN DE CUPO ---
+
     def validate_bloque_horario(self, field):
         import csv
         import os
@@ -104,18 +105,17 @@ class RegistroCitaForm(FlaskForm):
                 for fila in lector:
                     # El CSV ahora tiene una columna 'especie' donde dice si es Perro o Gato
                     if (fila['especie'].strip() == self.especie.data and
-                        fila['dia'].strip() == self.dia_semana.data and
-                        fila['bloque'].strip() == field.data):
-                        limite = int(fila['limite'])
+                        fila['dia_semana'].strip() == self.dia_semana.data and
+                        fila['bloque_horario'].strip() == field.data):
+                        limite = int(fila['cupo'])
                         break
 
-        # --- PLAN DE RESCATE ---
-        # Si limite sigue siendo None, significa que NO encontró la combinación en el CSV
+
         if limite is None:
             print(f"DEBUG: No se encontró en CSV: {self.especie.data} | {self.dia_semana.data} | {field.data}")
-            limite = 10 # Le damos un margen para que no te bloquee mientras pruebas
+            limite = 10
 
-        # 2. Contar citas actuales en la DB
+
         from hospvet.models import Cita
         citas_existentes = Cita.query.filter_by(
             especie=self.especie.data,

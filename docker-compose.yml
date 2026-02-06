@@ -15,16 +15,19 @@ services:
   web:
     build: .
     container_name: vet_app
+    restart: always
     ports:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://user_vet:password_seguro@db:5432/camp_vacu_vet
       - FLASK_ENV=production
-      - SECRET_KEY=tu_llave_muy_secreta
+      - SECRET_KEY=tu_llave_muy_secreta_UUID_2026
     depends_on:
       - db
     volumes:
       - ./hospvet/static/uploads:/app/hospvet/static/uploads
+
+      - ./hospvet/campañas/vacunacion/cupos.csv:/app/hospvet/campañas/vacunacion/cupos.csv
 
 volumes:
   postgres_data:

@@ -1,4 +1,4 @@
-import uuid # <--- ¡IMPORTANTE!
+import uuid
 from datetime import datetime, timezone
 from hospvet.extensions import db
 
@@ -20,6 +20,5 @@ class Cita(db.Model):
     fecha_registro = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     comprobante_filename = db.Column(db.String(255))
 
-    # --- NUEVA COLUMNA DE SEGURIDAD ---
-    # Se genera un código único automático para cada registro
+
     unique_id = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))

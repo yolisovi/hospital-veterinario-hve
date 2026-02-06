@@ -20,10 +20,12 @@
             </div>
         </header>
 
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            {% for message in messages %}
-              <div class="alert alert-success" style="padding: 15px; background-color: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 20px;">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;
+                {% if category == 'danger' %} background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;
+                {% else %} background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; {% endif %}">
                   {{ message }}
               </div>
             {% endfor %}
@@ -255,8 +257,139 @@
                     {{ form.telefono.label }}
                     {{ form.telefono(placeholder="10 dígitos", type="tel") }}
                 </div>
+                <!--script1-->
+                <!--<script>
+                    // 1. Mostrar/Ocultar secciones según la especie
+                    function toggleEspecie() {
+                        const selector = document.getElementById("especie");
+                        const especie = selector.value;
 
-                <div class="full-column">
+                        const divGatos = document.getElementById("div_gatos");
+                        const divPerros = document.getElementById("div_perros");
+
+                        if (divGatos) divGatos.classList.toggle("hidden", especie !== "Gato");
+                        if (divPerros) divPerros.classList.toggle("hidden", especie !== "Perro");
+
+                        // Cada vez que cambia la especie, filtramos los horarios
+                        filtrarHorarios();
+                    }
+
+                    // 2. Filtrar horarios según Especie, Día y Cupos
+                    function filtrarHorarios() {
+                        const especie = document.getElementById("especie").value;
+                        const dia = document.getElementById("dia_semana").value;
+                        const horarioSelect = document.getElementById("bloque_horario");
+
+                        // Traemos la lista de Flask (asegúrate que routes.py la envíe)
+                        const agotados = {{ horarios_llenos | default([]) | tojson | safe }};
+
+                        if (!horarioSelect) return;
+
+                        // Backup de las opciones originales para no perderlas al vaciar el select
+                        if (!window.opcionesBase) {
+                            window.opcionesBase = Array.from(horarioSelect.options);
+                        }
+
+                        const valorPrevio = horarioSelect.value;
+                        horarioSelect.innerHTML = '';
+
+                        window.opcionesBase.forEach(option => {
+                            if (option.value === "") {
+                                horarioSelect.appendChild(option.cloneNode(true));
+                                return;
+                            }
+
+                            const hora = option.value;
+                            let esValido = false;
+
+                            // LÓGICA DE AGENDA: Filtramos visualmente para que no se mezclen
+                            if (especie === "Perro") {
+                                // Perros ven: 10, 11 y tarde (15-17)
+                                if (hora.startsWith("10") || hora.startsWith("11") || parseInt(hora) >= 15) {
+                                    esValido = true;
+                                }
+                            } else if (especie === "Gato") {
+                                // Gatos ven: 12, 13 y tarde (15-17)
+                                if (hora.startsWith("12") || hora.startsWith("13") || parseInt(hora) >= 15) {
+                                    esValido = true;
+                                }
+                            }
+
+                            if (esValido) {
+                                const nuevaOpcion = option.cloneNode(true);
+                                const llave = `${especie}|${dia}|${hora}`;
+
+                                if (agotados.includes(llave)) {
+                                    nuevaOpcion.disabled = true;
+                                    nuevaOpcion.text += " (CUPO LLENO)";
+                                    nuevaOpcion.style.color = "red";
+                                }
+                                horarioSelect.appendChild(nuevaOpcion);
+                            }
+                        });
+
+                        horarioSelect.value = valorPrevio;
+                    }
+
+                    // 3. Validación de archivo y confirmación
+                    function validarRegistro() {
+                        const fileInput = document.getElementById('comprobante_pago');
+                        const submitBtn = document.querySelector('.btn-submit');
+                        const checkConfirm = document.getElementById('confirmacion');
+
+                        const tieneArchivo = fileInput && fileInput.files.length > 0;
+                        const estaConfirmado = checkConfirm ? checkConfirm.checked : true;
+
+                        if (submitBtn) {
+                            if (tieneArchivo && estaConfirmado) {
+                                submitBtn.disabled = false;
+                                submitBtn.style.opacity = "1";
+                            } else {
+                                submitBtn.disabled = true;
+                                submitBtn.style.opacity = "0.5";
+                            }
+                        }
+                    }
+
+                    // Inicialización al cargar la página
+                    document.addEventListener('DOMContentLoaded', function() {
+                        toggleEspecie();
+                        validarRegistro();
+
+                        // Escuchar cambios en el selector de día
+                        document.getElementById('dia_semana').addEventListener('change', filtrarHorarios);
+
+                        // Escuchar cambios en el checkbox de confirmación
+                        const checkConfirm = document.getElementById('confirmacion');
+                        if (checkConfirm) checkConfirm.addEventListener('change', validarRegistro);
+
+                        // Lógica para el input de archivo
+                        const fileInput = document.getElementById('comprobante_pago');
+                        if (fileInput) {
+                            fileInput.addEventListener('change', function() {
+                                const btnQuitar = document.getElementById('btn-quitar-archivo');
+                                const infoNombre = document.getElementById('nombre-archivo');
+                                if (this.files.length > 0) {
+                                    infoNombre.textContent = "Seleccionado: " + this.files[0].name;
+                                    btnQuitar.classList.remove('hidden');
+                                }
+                                validarRegistro();
+                            });
+                        }
+
+                        // Botón quitar archivo
+                        document.getElementById('btn-quitar-archivo').addEventListener('click', function() {
+                            const fileInput = document.getElementById('comprobante_pago');
+                            fileInput.value = "";
+                            document.getElementById('nombre-archivo').textContent = "";
+                            this.classList.add('hidden');
+                            validarRegistro();
+                        });
+                    });
+
+                 </script>
+                -->
+                 <div class="full-column">
                     {{ form.especie.label }}
                     {{ form.especie(onchange="toggleEspecie()", id="especie") }}
                 </div>
@@ -352,127 +485,113 @@
         </form>
 
         <script>
-            function toggleEspecie() {
-                const selector = document.getElementById("especie");
-                const especie = selector.value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const especieSelector = document.getElementById("especie");
+            const diaSelector = document.getElementById("dia_semana");
+            const horarioSelect = document.getElementById("bloque_horario");
+            const fileInput = document.getElementById('comprobante_pago');
+            const checkConfirm = document.getElementById('confirmacion');
+            const submitBtn = document.querySelector('.btn-submit');
+            const btnQuitar = document.getElementById('btn-quitar-archivo');
+            const infoNombre = document.getElementById('nombre-archivo');
+
+
+            if (!window.opcionesBase && horarioSelect) {
+                window.opcionesBase = Array.from(horarioSelect.options);
+            }
+
+            function actualizarInterfaz() {
+                const especie = especieSelector.value;
+
 
                 const divGatos = document.getElementById("div_gatos");
                 const divPerros = document.getElementById("div_perros");
-                const tPerro = document.getElementById("tabla_costos_perro");
-                const tGato = document.getElementById("tabla_costos_gato");
+                if (divGatos) divGatos.classList.toggle("hidden", especie !== "Gato");
+                if (divPerros) divPerros.classList.toggle("hidden", especie !== "Perro");
 
-                divGatos.classList.toggle("hidden", especie !== "Gato");
-                divPerros.classList.toggle("hidden", especie !== "Perro");
 
-                if(tGato) tGato.classList.toggle("hidden", especie !== "Gato");
-                if(tPerro) tPerro.classList.toggle("hidden", especie !== "Perro");
+                filtrarHorarios();
             }
 
-            function validarRegistro() {
-                const fileInput = document.getElementById('comprobante_pago');
-                const submitBtn = document.querySelector('.btn-submit');
-                const checkConfirm = document.getElementById('confirmacion');
+            function filtrarHorarios() {
+                if (!horarioSelect || !window.opcionesBase) return;
 
+                const especie = especieSelector.value;
+                const dia_actual = diaSelector.value;
+                const agotados = {{ horarios_llenos | default([]) | tojson | safe }};
+                const valorPrevio = horarioSelect.value;
+
+
+                horarioSelect.innerHTML = '';
+
+                window.opcionesBase.forEach(option => {
+
+                    if (option.value === "") {
+                        horarioSelect.appendChild(option.cloneNode(true));
+                        return;
+                    }
+
+
+                    const nuevaOpcion = option.cloneNode(true);
+                    const hora = option.value;
+                    const llave = `${especie}|${dia_actual}|${hora}`;
+
+                    if (agotados.includes(llave)) {
+                        nuevaOpcion.disabled = true;
+                        nuevaOpcion.text += " (CUPO LLENO)";
+                        nuevaOpcion.style.color = "red";
+                    }
+
+                    horarioSelect.appendChild(nuevaOpcion);
+                });
+
+                horarioSelect.value = valorPrevio;
+            }
+
+            function validarFormulario() {
                 const tieneArchivo = fileInput && fileInput.files.length > 0;
-                // Si no tienes checkbox de confirmación, esto siempre será true
                 const estaConfirmado = checkConfirm ? checkConfirm.checked : true;
 
-                if (tieneArchivo && estaConfirmado) {
-                    submitBtn.disabled = false;
-                    submitBtn.style.opacity = "1";
-                } else {
-                    submitBtn.disabled = true;
-                    submitBtn.style.opacity = "0.5";
+                if (submitBtn) {
+                    const listo = tieneArchivo && estaConfirmado;
+                    submitBtn.disabled = !listo;
+                    submitBtn.style.opacity = listo ? "1" : "0.5";
                 }
             }
 
-            // Ejecutar al cargar la página
-            window.onload = function() {
-                toggleEspecie();
-                validarRegistro();
-            };
+            // Eventos
+            especieSelector.addEventListener('change', actualizarInterfaz);
+            diaSelector.addEventListener('change', filtrarHorarios);
+            if (checkConfirm) checkConfirm.addEventListener('change', validarFormulario);
 
-            // --- IMPORTANTE: Escuchar cambios en el input de archivo ---
-            document.addEventListener('change', function(e) {
-                if (e.target.id === 'comprobante_pago' || e.target.id === 'confirmacion') {
-                    validarRegistro();
-                }
-            });
-
-            // Agrega esto dentro de tu etiqueta <script> existente
-            document.addEventListener('change', function(e) {
-                if (e.target.id === 'comprobante_pago') {
-                    const btnQuitar = document.getElementById('btn-quitar-archivo');
-                    const infoNombre = document.getElementById('nombre-archivo');
-
-                    if (e.target.files.length > 0) {
-                        // Mostrar nombre del archivo y botón de quitar
-                        infoNombre.textContent = "Seleccionado: " + e.target.files[0].name;
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    if (this.files.length > 0) {
+                        infoNombre.textContent = "Seleccionado: " + this.files[0].name;
                         btnQuitar.classList.remove('hidden');
                     }
-                    validarRegistro(); // Tu función que habilita/deshabilita el botón de enviar
-                }
-            });
-
-            // Lógica para el botón de quitar
-            document.getElementById('btn-quitar-archivo').addEventListener('click', function() {
-                const fileInput = document.getElementById('comprobante_pago');
-                const infoNombre = document.getElementById('nombre-archivo');
-
-                fileInput.value = ""; // Limpia el archivo del input
-                infoNombre.textContent = ""; // Borra el texto
-                this.classList.add('hidden'); // Oculta este botón
-
-                validarRegistro(); // Vuelve a desactivar el botón de envío
-            });
-
-            // Lógica de deselección de Radio Buttons
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('click', function() {
-                    if (this.previousValue === 'true') {
-                        this.checked = false;
-                        this.previousValue = 'false';
-                    } else {
-                        document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
-                            r.previousValue = 'false';
-                        });
-                        this.previousValue = 'true';
-                    }
+                    validarFormulario();
                 });
-            });
+            }
 
-            // Recibimos la lista de horarios agotados desde Flask
-                const horariosAgotados = {{ horarios_llenos | tojson }};
-
-                function filtrarHorarios() {
-                    const especieActiva = document.querySelector('input[name="especie"]:checked')?.value;
-                    const diaSeleccionado = document.getElementById('dia_semana').value;
-                    const selectHorario = document.getElementById('bloque_horario');
-
-                    if (!especieActiva || !diaSeleccionado) return;
-
-                    // Revisamos cada opción del selector de horas
-                    Array.from(selectHorario.options).forEach(option => {
-                        // Creamos la "llave" igual a como la generamos en Python: "Perro|LUNES 16|10:00 - 11:00"
-                        const llaveBusqueda = `${especieActiva}|${diaSeleccionado}|${option.value}`;
-
-                        if (horariosAgotados.includes(llaveBusqueda)) {
-                            option.disabled = true;
-                            option.style.color = '#ccc';
-                            option.text = option.value + " (AGOTADO)";
-                        } else {
-                            option.disabled = false;
-                            option.style.color = '#000';
-                            option.text = option.value;
-                        }
-                    });
-                }
-
-                // Escuchar cambios en especie y día
-                document.querySelectorAll('input[name="especie"]').forEach(radio => {
-                    radio.addEventListener('change', filtrarHorarios);
+            if (btnQuitar) {
+                btnQuitar.addEventListener('click', function() {
+                    fileInput.value = "";
+                    infoNombre.textContent = "";
+                    this.classList.add('hidden');
+                    validarFormulario();
                 });
-                document.getElementById('dia_semana').addEventListener('change', filtrarHorarios);
+            }
+
+            // Inicialización
+            actualizarInterfaz();
+            validarFormulario();
+        });
         </script>
+    <footer>
+        <p style= "color: #ccc;">
+        &copy; 2026 Diseño de sistemas UAMX .Todos los derechos reservados.
+        </p>
+    </footer>
 </body>
 </html>

@@ -76,15 +76,17 @@
                 <tr>
                     <th>ID</th>
                     <th>Mascota</th>
+                    <th>Edad</th>
                     <th>Especie</th>
                     <th>Tutor / Contacto</th>
                     <th>Servicios</th>
-                    <th>Día y Horario</th> <th>Costo</th> <th>Pago</th> </tr>
+                    <th>Día y Horario</th> <th>Pago</th> </tr>
 
                 {% for cita in citas %}
                 <tr>
                     <td>{{ cita.id }}</td>
-                    <td><strong>{{ cita.mascota }}</strong> ({{ cita.edad }})</td>
+                    <td><strong>{{ cita.mascota }}</strong></td>
+                    <td>{{ cita.edad }}</td>
                     <td>
                         <span class="especie-tag {{ 'tag-perro' if cita.especie == 'Perro' else 'tag-gato' }}">
                             {{ cita.especie }}
@@ -99,7 +101,6 @@
 
                     <td>{{ cita.dia_semana }}<br><small>{{ cita.bloque_horario }}</small></td>
 
-                    <td><strong>${{ "%.2f"|format(cita.costo_total) }}</strong></td>
 
                     <td>
                         {% if cita.comprobante_filename %}

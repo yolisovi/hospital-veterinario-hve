@@ -1,3 +1,4 @@
+import csv
 import os
 import uuid
 from datetime import datetime
@@ -15,25 +16,58 @@ campvacuna = Blueprint('campvacuna', __name__)
 # ==========================================
 
 def obtener_horarios_agotados():
-    """
-    Esta función ahora es más simple. Consulta la DB y
-    compara contra un límite fijo o podrías llamar a la lógica del form.
-    Por ahora, la dejaremos básica para que no rompa tu código.
-    """
     agotados = []
-    citas_actuales = db.session.query(
-        Cita.especie, Cita.dia_semana, Cita.bloque_horario, func.count(Cita.id)
+
+
+    conteo_db = db.session.query(
+        Cita.especie,
+        Cita.dia_semana,
+        Cita.bloque_horario,
+        func.count(Cita.id)
     ).group_by(Cita.especie, Cita.dia_semana, Cita.bloque_horario).all()
 
-    # Nota: Aquí podrías implementar una lógica similar a la del Form
-    # si quieres que el calendario pinte los grises automáticamente.
+
+    dict_citas = {(e, d, h): c for e, d, h, c in conteo_db}
+
+    try:
+
+        ruta_csv = os.path.join(os.path.dirname(__file__), 'cupos.csv')
+
+        with open(ruta_csv, mode='r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+
+                esp_csv = (row.get('especie') or '').strip()
+                dia_csv = (row.get('dia_semana') or '').strip()
+                hor_csv = (row.get('bloque_horario') or '').strip()
+
+
+                try:
+                    limite = int(row.get('cupo', 0))
+                except (ValueError, TypeError):
+                    continue
+
+
+                if not esp_csv or not dia_csv or not hor_csv:
+                    continue
+
+
+                total_actual = dict_citas.get((esp_csv, dia_csv, hor_csv), 0)
+
+                if total_actual >= limite:
+                    agotados.append(f"{esp_csv}|{dia_csv}|{hor_csv}")
+
+    except Exception as e:
+        print(f"Error procesando cupos: {e}")
+
+
     return agotados
 
+
 def calcular_costo(especie, servicios_seleccionados, peso_interno=None, peso_externo=None):
-    # (Mantén tu diccionario de precios aquí, estaba correcto en tu código)
-    # ... [Tu lógica de precios actual] ...
+
     total = 0.0
-    # ... [Tu lógica de suma de costos actual] ...
+
     return total
 
 # ==========================================
@@ -45,32 +79,75 @@ def campvacini():
     # 1. Mantenimiento
     mantenimiento = os.environ.get('MODO_MANTENIMIENTO', 'OFF').strip()
     if mantenimiento == 'ON':
-        # Cambiado a tu nueva preferencia de seguridad
+
         if request.args.get('acceso') != "UUIDs":
             return render_template('mantenimiento.html'), 503
 
     form = RegistroCitaForm()
 
+    lista_de_bloqueados = obtener_horarios_agotados()
+
     if form.validate_on_submit():
         try:
-            # 2. Procesar Archivo con UUID (Tu nueva preferencia)
+
+            conteo_actual = Cita.query.filter_by(
+                especie=form.especie.data,
+                dia_semana=form.dia_semana.data,
+                bloque_horario=form.bloque_horario.data
+            ).count()
+
+
+            cupo_maximo = 0
+            ruta_csv = os.path.join(os.path.dirname(__file__), 'cupos.csv')
+
+            with open(ruta_csv, mode='r', encoding='utf-8') as file:
+
+                reader = csv.DictReader(file, skipinitialspace=True)
+
+
+                reader.fieldnames = [name.strip() for name in reader.fieldnames]
+
+                for row in reader:
+
+                    csv_especie = row.get('especie')
+                    csv_dia = row.get('dia_semana')
+                    csv_horario = row.get('bloque_horario')
+
+                    if csv_especie == form.especie.data and \
+                        csv_dia == form.dia_semana.data and \
+                        csv_horario == form.bloque_horario.data:
+                        cupo_maximo = int(row.get('cupo', 0))
+                        break
+
+
+            if conteo_actual >= cupo_maximo:
+                flash(f'¡Lo sentimos! El cupo para {form.especie.data} en este horario está lleno.', 'danger')
+                return render_template('formulario_vacunacion_2026.html', form=form, horarios_llenos=obtener_horarios_agotados())    # ------------------------------------------------------------
+
+
             filename = None
             if form.comprobante_pago.data:
                 file = form.comprobante_pago.data
                 ext = os.path.splitext(file.filename)[1]
-                # Nombre de archivo puramente UUID para evitar rastreos
                 filename = f"{uuid.uuid4().hex}{ext}"
-
                 upload_path = os.path.join(current_app.root_path, 'static', 'uploads')
                 if not os.path.exists(upload_path): os.makedirs(upload_path)
                 file.save(os.path.join(upload_path, filename))
 
-            # 3. Lógica de Pesos y Servicios (Simplificada para legibilidad)
-            especie = form.especie.data
-            servicios_sel = form.servicios_perro.data if especie == 'Perro' else form.servicios_gato.data
-            lista_final_servicios = list(servicios_sel)
 
-            # 4. Guardar en BD
+
+            especie = form.especie.data
+            if especie == 'Perro':
+                lista_final_servicios = list(form.servicios_perro.data)
+                # Sumamos los radio buttons si tienen selección
+                if form.rango_peso_perro_interno.data:
+                    lista_final_servicios.append(form.rango_peso_perro_interno.data)
+                if form.rango_peso_perro_externo.data:
+                    lista_final_servicios.append(form.rango_peso_perro_externo.data)
+            else:
+                lista_final_servicios = list(form.servicios_gato.data)
+
+
             nueva_cita = Cita(
                 email=form.email.data,
                 nombre=form.nombre.data,
@@ -98,32 +175,11 @@ def campvacini():
             db.session.rollback()
             flash(f"Error al guardar: {str(e)}", "danger")
 
-    # Si el formulario falla o es un GET, regresamos al mismo sitio con los errores
+
     return render_template('formulario_vacunacion_2026.html', form=form, horarios_llenos=obtener_horarios_agotados())
 
 @campvacuna.route('/confirmacion/<string:u_id>')
 def confirmacion_cita(u_id):
-    # Buscamos por el UUID. Si alguien cambia una letra, le dará error 404
+
     cita = Cita.query.filter_by(unique_id=u_id).first_or_404()
     return render_template('confirmacion_publica.html', cita=cita)
-
-
-
-# @campvacuna.route('/admin')
-# def admin_panel():
-#     acceso = request.args.get('acceso')
-#     # Corregido: usamos 'acceso' en lugar de 'acceso_secreto'
-#     if acceso != "UUIDs":
-#         return "No autorizado", 403
-#     citas = Cita.query.all()
-#     return render_template('admin.html', citas=citas)
-
-# # @campvacuna.route('/admin')
-# @campvacuna.route('/panel-de-control-veterinario') # <--- Cambia '/admin' por algo largo y único
-# def admin_panel():
-#     acceso = request.args.get('acceso')
-#     # Cambia esta línea al principio de tu función campvacini
-#     if acceso != "UUIDs": # Antes tenías hve2026
-#         return "No autorizado", 403
-#     citas = Cita.query.all()
-#     return render_template('admin.html', citas=citas)

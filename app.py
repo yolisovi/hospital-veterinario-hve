@@ -5,7 +5,7 @@ from hospvet import create_app, db
 app = create_app()
 
 # Eliminamos el @app.route('/') de aquí porque está chocando.
-# La ruta raíz debe controlarse desde el Blueprint de la campaña.
+# La ruta raíz debe controlarse desde el Bluede la campaña.
 
 with app.app_context():
     try:

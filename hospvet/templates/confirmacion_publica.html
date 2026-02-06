@@ -82,7 +82,7 @@
                     <strong>{{ cita.bloque_horario }}</strong>
                 </div>
                 <hr />
-                <p><strong>Servicios:</strong></p>
+
                 <div
                     class="servicios-container"
                     style="margin-top: 15px; text-align: left"
@@ -98,7 +98,8 @@
                         Servicios Registrados:
                     </strong>
                     <ul style="list-style: none; padding-left: 0; margin: 0">
-                        {% for servicio in cita.servicios.split(', ') %}
+                        {% for servicio in cita.servicios.split(', ') %} {% if
+                        servicio %}
                         <li
                             style="
                                 padding: 4px 0;
@@ -107,16 +108,13 @@
                                 color: #333;
                             "
                         >
-                            <span style="color: #2c3e50">✔</span> {{ servicio }}
+                            <span style="color: #2c3e50">✔</span>
+                            {{ servicio.replace('_', ' ').capitalize() }}
                         </li>
-                        {% endfor %}
+                        {% endif %} {% endfor %}
                     </ul>
                 </div>
             </div>
-
-            <!--<div class="total">
-                Total Estimado: ${{ "%.2f"|format(cita.costo_total) }}
-            </div>-->
 
             <div class="no-imprimir">
                 <button onclick="window.print()" class="btn-submit">

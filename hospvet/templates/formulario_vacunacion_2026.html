@@ -214,8 +214,16 @@
 
 
         <form action="{{ url_for('campvacuna.campvacini') }}" method="POST" enctype="multipart/form-data">
-
-            {{ form.hidden_tag() }}
+            <!--dejar esto {{ form.hidden_tag() }} una vez que no este en render-->
+            {{ form.hidden_tag() }} {% if form.errors %}
+                <div style="color: red; border: 1px solid red; padding: 10px;">
+                    <ul>
+                    {% for field, errors in form.errors.items() %}
+                        <li>{{ field }}: {{ errors|join(', ') }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
 
             <div class="form-grid">
 

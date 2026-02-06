@@ -173,6 +173,7 @@ def campvacini():
 
         except Exception as e:
             db.session.rollback()
+
             flash(f"Error al guardar: {str(e)}", "danger")
 
 

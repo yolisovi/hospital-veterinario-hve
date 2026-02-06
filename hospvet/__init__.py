@@ -1,30 +1,30 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_wtf.csrf import CSRFProtect
-from flask_bcrypt import Bcrypt
-from flask_migrate import Migrate
-from hospvet.config import Desarrollo as configuracion #importar cuando vaya a clase Produccion
+from hospvet.config import Desarrollo as configuracion
+# Importamos las extensiones desde el nuevo archivo que creaste
+from hospvet.extensions import db, csrf, bcrypt, migrate
+from hospvet.campañas.vacunacion.routes import campvacuna
+from hospvet.inicio.routes import inicio
 
-db = SQLAlchemy()
-csrf = CSRFProtect() #PARA PORTEGER LOS FORMULARIOS
-bcrypt = Bcrypt() #encriptar el ID del registro que se va a enviar.
-migrate = Migrate()
 
-def create_app(): #función que genra la aplicación
-    app = Flask(__name__) #aquí se genra la aplicación
-    app.config.from_object(configuracion) #parametros de configuración de la aplicaion, se tomaran del objeto llamado desarrollo
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(configuracion)
 
-    db.init_app(app) #enlazamos ya sea con sqlite o postgresSQL
+    # Inicializamos las extensiones
+    db.init_app(app)
     csrf.init_app(app)
     bcrypt.init_app(app)
     migrate.init_app(app)
 
-    from hospvet import models #traemos los modelos se crea después de que db se crea para que no hay probelma cicular.
-
-    from hospvet.inicio.routes import inicio #es el bluprint de routes inicio
+    # IMPORTANTE: Los imports de rutas van AQUÍ ADENTRO
+    # para evitar el error circular que te salió antes
+    from hospvet.inicio.routes import inicio
     from hospvet.campañas.vacunacion.routes import campvacuna
 
-    app.register_blueprint(inicio)
-    app.register_blueprint(campvacuna, url_prefix='/vacunacion')
+    # Registramos los Blueprints (Campaña manda en la raíz '/')
+
+    app.register_blueprint(campvacuna, url_prefix='/')
+    # app.register_blueprint(inicio, url_prefix='/web-inicio')
+    #  app.register_blueprint(inicio, url_prefix='/inicio')
 
     return app

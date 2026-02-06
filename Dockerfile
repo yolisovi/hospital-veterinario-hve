@@ -1,19 +1,17 @@
 FROM python:3.11-slim
 
-# Instalar uv para velocidad
+# Instalamos uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Copiamos requerimientos
-COPY requirements.txt .
+# Copiamos el archivo (el punto indica la raíz donde estamos parados)
+COPY ./requirements.txt /app/requirements.txt
+
+# Instalamos
 RUN uv pip install --system -r requirements.txt
 
-# Copiamos todo el proyecto
+# Luego el resto
 COPY . .
 
-# Variables de entorno por defecto (Render las sobreescribirá)
-ENV PORT=8080
-
-# Comando para arrancar usando Python directamente
 CMD ["python", "app.py"]

@@ -1,6 +1,6 @@
 import uuid # <--- ¡IMPORTANTE!
 from datetime import datetime, timezone
-from hospvet import db
+from hospvet.extensions import db
 
 class Cita(db.Model):
     __tablename__ = 'citas'

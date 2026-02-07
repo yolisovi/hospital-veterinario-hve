@@ -12,14 +12,14 @@ class MultiCheckboxField(SelectMultipleField):
 class RegistroCitaForm(FlaskForm):
 
     email = StringField('Correo Electrónico', validators=[DataRequired(message="El correo es obligatorio"), Email(message="Ingresa un correo válido")])
-    nombre = StringField('Nombre del Dueño', validators=[DataRequired()])
+    nombre = StringField('Nombre del Tutor', validators=[DataRequired()])
     apellido1 = StringField('Primer Apellido', validators=[DataRequired()])
     apellido2 = StringField('Segundo Apellido')
     telefono = StringField('Teléfono de contacto', validators=[DataRequired(message="El teléfono es obligatorio"), Regexp(r'^\d{10}$', message="El teléfono debe tener exactamente 10 dígitos numéricos.")])
 
 
-    mascota = StringField('Nombre de la Mascota', validators=[DataRequired()])
-    edad = IntegerField('Edad de la Mascota (Años)', validators=[DataRequired()])
+    mascota = StringField('Nombre del animal de compañía', validators=[DataRequired()])
+    edad = IntegerField('Edad del animal de compañía (Años)', validators=[DataRequired()])
     especie = SelectField('Especie', choices=[('', 'Seleccione especie'), ('Perro', 'Perro'), ('Gato', 'Gato')], validators=[DataRequired()])
 
 

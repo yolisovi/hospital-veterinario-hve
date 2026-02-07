@@ -3,7 +3,7 @@ import os
 import uuid
 from datetime import datetime
 from flask import Blueprint, render_template, url_for, request, flash, redirect, current_app
-from hospvet import db
+from hospvet import db, csrf
 from hospvet.models import Cita
 from hospvet.campañas.vacunacion.forms import RegistroCitaForm
 from sqlalchemy import func
@@ -184,3 +184,24 @@ def confirmacion_cita(u_id):
 
     cita = Cita.query.filter_by(unique_id=u_id).first_or_404()
     return render_template('confirmacion_publica.html', cita=cita)
+
+@campvacuna.route('/recuperar', methods=['GET', 'POST'])
+def recuperar_cita():
+    if request.method == 'POST':
+        email_busqueda = request.form.get('email').strip().lower()
+        mascota_busqueda = request.form.get('mascota').strip().lower()
+
+        # Buscamos en la base de datos (hacemos la comparación en minúsculas para evitar errores)
+        # Importante: Asegúrate que 'Cita' sea el nombre de tu modelo de BD
+        cita = Cita.query.filter(
+            Cita.email.ilike(email_busqueda),
+            Cita.mascota.ilike(mascota_busqueda)
+        ).first()
+
+        if cita:
+            # Si la encontramos, mostramos el template que ya tienes de confirmación
+            return render_template('confirmacion_publica.html', cita=cita)
+        else:
+            flash('No se encontró ninguna cita con esos datos. Verifica que el correo y nombre sean correctos.', 'danger')
+
+    return render_template('recuperar.html')

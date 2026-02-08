@@ -64,25 +64,25 @@ class RegistroCitaForm(FlaskForm):
     ])
 
     rango_peso_perro_interno = RadioField('Desparasitación interna según peso', choices=[
-        ('desp_int_menor_10kg', 'Desparasitación interna (Perro < 10Kg)'),
-        ('desp_int_10kg_20kg', 'Desparasitación interna (Perro 10Kg - 20Kg)'),
-        ('desp_int_mayor_20kg', 'Desparasitación interna (Perro > 20Kg)')
+        ('desp_int_menor_10kg', 'Desparasitación interna (Perro peso menor a 10Kg)'),
+        ('desp_int_10kg_20kg', 'Desparasitación interna (Perro peso mayor a 10Kg y hasta 20Kg)'),
+        ('desp_int_mayor_20kg', 'Desparasitación interna (Perro peso mayor a 20Kg)')
     ], validators=[Optional()])
 
     rango_peso_perro_externo = RadioField('Desparasitación externa según peso', choices=[
-        ('desp_ext_menor_10kg', 'Desparasitación externa (Perro < 10Kg)'),
-        ('desp_ext_10kg_20kg', 'Desparasitación externa (Perro 10Kg - 20Kg)'),
-        ('desp_ext_mayor_20kg', 'Desparasitación externa (Perro > 20Kg)')
+        ('desp_ext_menor_10kg', 'Desparasitación externa (Perro peso menor a 10Kg)'),
+        ('desp_ext_10kg_20kg', 'Desparasitación externa (Perro peso mayor a 10Kg y hasta 20Kg)'),
+        ('desp_ext_mayor_20kg', 'Desparasitación externa (Perro peso mayor a 20Kg)')
     ], validators=[Optional()])
 
     servicios_gato = MultiCheckboxField('Servicios para Gatos', choices=[
-        ('v_cuadruple_desparacitacion_completa', 'Vacuna cuádruple felina y Desparasitación Interna/Externa'),
+        ('v_cuadruple_desparacitacion_completa', 'Vacuna cuádruple felina (Feligen CRP), Desparacitación Interna y Externa'),
         ('prueba_v_leucemia', 'Prueba Leucemia y Vacuna Leucemia'),
-        ('v_rabia_desparacitacion_completa', 'Vacuna contra Rabia y Desparasitación Interna/Externa'),
-        ('desparacitacion_interna_externa', 'Desparasitación Interna y Externa'),
+        ('v_rabia_desparacitacion_completa', 'Vacuna contra Rabia (Imrab® 3 TF) Desparacitación Interna y Externa'),
+        ('desparacitacion_interna_externa', 'Desparacitación Interna y Externa'),
         ('v_cuadruple_felina', 'Vacuna Cuádruple felina (Feligen CRP)'),
-        ('desparacitacion_interna', 'Desparasitación Interna'),
-        ('v_antirrabica_gato', 'Vacuna Rabia (Imrab 3 TF)')
+        ('desparacitacion_interna', 'Desparacitación Interna'),
+        ('v_antirrabica_gato', 'Vacuna Rabia (Imrab® 3 TF)')
     ], validators=[Optional()])
 
 

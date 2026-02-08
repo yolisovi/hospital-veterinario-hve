@@ -86,7 +86,7 @@ class RegistroCitaForm(FlaskForm):
     ], validators=[Optional()])
 
 
-    confirmacion = BooleanField('Acepto las indicaciones y confirmo que los datos son correctos', validators=[DataRequired()])
+    confirmacion = BooleanField('Acepto las indicaciones y confirmo que los datos son correctos.', validators=[DataRequired()])
     comprobante_pago = FileField('Comprobante de Pago')
     submit = SubmitField('Registrar Cita')
 

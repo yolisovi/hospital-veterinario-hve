@@ -33,7 +33,8 @@ class RegistroCitaForm(FlaskForm):
         ('Martes 24', 'Martes 24 de Febrero'),
         ('Miércoles 25', 'Miércoles 25 de Febrero'),
         ('Jueves 26', 'Jueves 26 de Febrero'),
-        ('Viernes 27', 'Viernes 27 de Febrero')
+        ('Viernes 27', 'Viernes 27 de Febrero'),
+        ('Prueba Técnica', '--- MODO PRUEBA ---') # eliminar esta linea
     ], validators=[DataRequired()])
 
 
@@ -45,7 +46,8 @@ class RegistroCitaForm(FlaskForm):
         ('13:00 - 14:00', '01:00 PM - 02:00 PM'),
         ('15:00 - 16:00', '03:00 PM - 04:00 PM'),
         ('16:00 - 17:00', '04:00 PM - 05:00 PM'),
-        ('17:00 - 18:00', '05:00 PM - 06:00 PM')
+        ('17:00 - 18:00', '05:00 PM - 06:00 PM'),
+        ('10:00 - 11:00', '10:00 PM - 11:00 PM') # eliminar esta linea
     ], validators=[DataRequired()])
 
 
